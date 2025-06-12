@@ -1,5 +1,5 @@
 import { IExecuteFunctions } from 'n8n-core';
-import { INodeType, INodeTypeDescription } from 'n8n-workflow';
+import { INodeType, INodeTypeDescription, NodeOperationError } from 'n8n-workflow';
 import { exec } from 'child_process';
 import * as path from 'path';
 import { promisify } from 'util';
@@ -31,13 +31,20 @@ export class ModbusGateway implements INodeType {
         const pointsJson = this.getNodeParameter('pointsJson', 0) as string;
         const scriptPath = path.join(__dirname, '../../N8N_modbus_gateway.py');
         const execAsync = promisify(exec);
-        const { stdout } = await execAsync(`python3 ${scriptPath}`, {
-            env: {
-                ...process.env,
-                MODBUS_CONFIG_JSON: pointsJson,
-                RUN_ONCE: '1',
-            },
-        });
+        let stdout: string;
+        try {
+            const { stdout: out } = await execAsync(`python3 ${scriptPath}`, {
+                env: {
+                    ...process.env,
+                    MODBUS_CONFIG_JSON: pointsJson,
+                    RUN_ONCE: '1',
+                },
+            });
+            stdout = out;
+        } catch (error) {
+            const stderr = (error as any).stderr || (error as Error).message;
+            throw new NodeOperationError(this.getNode(), `Python process error: ${stderr}`);
+        }
 
         const lines = stdout.trim().split(/\r?\n/);
         const last = lines[lines.length - 1];
