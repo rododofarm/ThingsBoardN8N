@@ -27,9 +27,14 @@ def load_config():
     with open("points.json", "r") as f:
         return json.load(f)
 
+def validate_config(config):
+    """Simple validation of required configuration structure"""
+    if not isinstance(config.get("points"), list):
+        raise ValueError("Invalid configuration: 'points' must be a list.")
 
 def main():
     config = load_config()
+    validate_config(config)
 
     # 載入全域設定
     MODBUS_HOST = config.get("modbus_host", "127.0.0.1")
@@ -42,6 +47,8 @@ def main():
     points = config.get("points", [])
 
     client = ModbusTcpClient(MODBUS_HOST, port=MODBUS_PORT)
+    if not client.connect():
+        raise Exception("Unable to connect to Modbus server")
     last_values = {}
     last_heartbeat = time.time()
     first_run = True
@@ -62,7 +69,10 @@ def main():
                     changed = True
             except Exception as e:
                 current_values[name] = None
-                errors[name] = str(e)
+                errors[name] = {
+                    "type": type(e).__name__,
+                    "message": str(e)
+                }
 
         if changed or errors:
             output = {
