@@ -1,0 +1,27 @@
+{
+  "modbus_host": "192.168.1.100",
+  "modbus_port": 502,
+  "unit_id": 1,
+  "poll_interval": 10,
+  "heartbeat_interval": 60,
+  "byte_order": "big",
+  "word_order": "little",
+  "points": [
+    {
+      "name": "temperature",
+      "function_code": 3,
+      "address": 100,
+      "quantity": 2,
+      "datatype": "float32"
+    },
+    {
+      "name": "pressure",
+      "function_code": 4,
+      "address": 200,
+      "quantity": 2,
+      "datatype": "float32",
+      "byte_order": "little",
+      "word_order": "big"
+    }
+  ]
+}
