@@ -27,12 +27,10 @@ def load_config():
     with open("points.json", "r") as f:
         return json.load(f)
 
-
 def validate_config(config):
     """Simple validation of required configuration structure"""
     if not isinstance(config.get("points"), list):
         raise ValueError("Invalid configuration: 'points' must be a list.")
-
 
 def main():
     config = load_config()
