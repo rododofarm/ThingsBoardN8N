@@ -8,5 +8,5 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "include": ["nodes/**/*.ts"]
+  "include": ["index.ts", "nodes/**/*.ts"]
 }
