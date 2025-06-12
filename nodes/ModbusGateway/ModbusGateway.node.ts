@@ -29,7 +29,12 @@ export class ModbusGateway implements INodeType {
 
     async execute(this: IExecuteFunctions) {
         const pointsJson = this.getNodeParameter('pointsJson', 0) as string;
-        const scriptPath = path.join(__dirname, '../../N8N_modbus_gateway.py');
+        // Resolve path to Python script relative to the compiled dist directory
+        // so the gateway works when distributed.
+        const scriptPath = path.resolve(
+            __dirname,
+            '../../../N8N_modbus_gateway.py',
+        );
         const execAsync = promisify(exec);
         let stdout: string;
         try {
