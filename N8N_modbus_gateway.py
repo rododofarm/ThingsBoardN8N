@@ -1,7 +1,9 @@
 import json
+import os
+import sys
 import time
 from datetime import datetime
-from pymodbus.client import MododbusTcpClient
+from pymodbus.client import ModbusTcpClient
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 
@@ -13,9 +15,21 @@ BYTE_ORDER_MAP = {
 
 # === 主程式 ===
 
-def main():
+def load_config():
+    """Load configuration from env variable, file path or default points.json"""
+    if os.environ.get("MODBUS_CONFIG_JSON"):
+        return json.loads(os.environ["MODBUS_CONFIG_JSON"])
+
+    if len(sys.argv) > 1:
+        with open(sys.argv[1], "r") as f:
+            return json.load(f)
+
     with open("points.json", "r") as f:
-        config = json.load(f)
+        return json.load(f)
+
+
+def main():
+    config = load_config()
 
     # 載入全域設定
     MODBUS_HOST = config.get("modbus_host", "127.0.0.1")
@@ -31,6 +45,7 @@ def main():
     last_values = {}
     last_heartbeat = time.time()
     first_run = True
+    run_once = os.environ.get("RUN_ONCE") == "1"
 
     while True:
         now = time.time()
@@ -76,6 +91,9 @@ def main():
                 hb["errors"] = errors
             print(json.dumps(hb), flush=True)
             last_heartbeat = now
+
+        if run_once:
+            break
 
         time.sleep(POLL_INTERVAL)
 
