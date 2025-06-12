@@ -1,17 +1,22 @@
 {
-  "name": "thingsboard-n8n",
-  "version": "1.0.0",
+  "name": "n8n-nodes-thingsboard",
+  "version": "0.1.0",
   "description": "Custom Modbus gateway node for n8n",
-  "main": "dist/nodes/ModbusGateway/ModbusGateway.node.js",
+  "keywords": ["n8n-community-node-package"],
+  "main": "dist/index.js",
+  "files": ["dist"],
   "scripts": {
     "build": "tsc",
     "prepare": "npm run build"
   },
-  "dependencies": {
-    "n8n-core": "^1.14.1",
-    "n8n-workflow": "^1.82.0"
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "nodes": ["dist/nodes/ModbusGateway/ModbusGateway.node.js"]
   },
+  "dependencies": {},
   "devDependencies": {
+    "n8n-workflow": "*",
+    "n8n-core": "*",
     "typescript": "^5.2.2",
     "@types/node": "^24.0.1"
   }
