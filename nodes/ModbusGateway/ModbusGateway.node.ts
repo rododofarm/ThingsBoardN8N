@@ -60,9 +60,11 @@ export class ModbusGateway implements INodeType {
             data = { raw: stdout };
         }
         return [
-            {
-                json: data,
-            },
+            [
+                {
+                    json: data,
+                },
+            ],
         ];
     }
 }
