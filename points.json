@@ -1,27 +1,73 @@
 {
-  "modbus_host": "192.168.1.100",
-  "modbus_port": 502,
+  "ip": "192.168.1.100",
+  "port": 502,
   "unit_id": 1,
-  "poll_interval": 10,
+  "poll_interval": 2,
   "heartbeat_interval": 60,
   "byte_order": "big",
-  "word_order": "little",
-  "points": [
+  "word_order": "big",
+  "commands": [
     {
-      "name": "temperature",
-      "function_code": 3,
-      "address": 100,
-      "quantity": 2,
-      "datatype": "float32"
+      "function_code": 2,
+      "address": 20,
+      "quantity": 8,
+      "description": "WISE 5801 X-107i",
+      "fields": [
+        { "name": "1F_Front_Window", "offset": 0, "datatype": "bool" },
+        { "name": "1F_Main_Door", "offset": 1, "datatype": "bool" },
+        { "name": "1F_Back_Door", "offset": 2, "datatype": "bool" },
+        { "name": "2F_Sliding_Door", "offset": 3, "datatype": "bool" },
+        { "name": "Alarm_Switch", "offset": 4, "datatype": "bool" },
+        { "name": "2F_Back_Window", "offset": 5, "datatype": "bool" },
+        { "name": "RF_Sliding_Window", "offset": 6, "datatype": "bool" },
+        { "name": "RF_Back_Door", "offset": 7, "datatype": "bool" }
+      ]
     },
     {
-      "name": "pressure",
+      "function_code": 2,
+      "address": 140,
+      "quantity": 10,
+      "description": "WISE 5801 i-7041",
+      "fields": [
+        { "name": "1F_Env_Sensor", "offset": 0, "datatype": "bool" },
+        { "name": "1F_Back_Window", "offset": 1, "datatype": "bool" },
+        { "name": "2F_Front_Window", "offset": 2, "datatype": "bool" },
+        { "name": "Power_Status", "offset": 3, "datatype": "bool" },
+        { "name": "DVR_Alarm_Input", "offset": 4, "datatype": "bool" },
+        { "name": "Spare_Input", "offset": 5, "datatype": "bool" },
+        { "name": "3F_Front_Window", "offset": 6, "datatype": "bool" },
+        { "name": "3F_Sliding_Window", "offset": 7, "datatype": "bool" },
+        { "name": "3F_Back_Window", "offset": 8, "datatype": "bool" },
+        { "name": "RF_Back_Window", "offset": 9, "datatype": "bool" }
+      ]
+    },
+    {
       "function_code": 4,
-      "address": 200,
+      "address": 60,
       "quantity": 2,
-      "datatype": "float32",
-      "byte_order": "little",
-      "word_order": "big"
+      "description": "WISE 5801 internal",
+      "fields": [
+        { "name": "Lockdown_Switch", "offset": 0, "datatype": "float32" }
+      ]
+    },
+    {
+      "function_code": 4,
+      "address": 80,
+      "quantity": 2,
+      "description": "WISE 5801 internal",
+      "fields": [
+        { "name": "Detected_Value", "offset": 0, "datatype": "float32" }
+      ]
+    },
+    {
+      "function_code": 4,
+      "address": 100,
+      "quantity": 2,
+      "description": "Daily Life Info",
+      "fields": [
+        { "name": "Coffee_Machine_Status", "offset": 0, "datatype": "float32" },
+        { "name": "Laundry_Complete", "offset": 1, "datatype": "float32" }
+      ]
     }
   ]
 }
